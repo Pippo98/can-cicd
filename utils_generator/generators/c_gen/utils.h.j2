@@ -1,0 +1,29 @@
+#include <string.h>
+
+{% for msg_name, message in network.get_messages().items() %}
+void {{utils.to_camel_case(network.name)}}{{utils.to_camel_case(msg_name,"_")}}ToString({{utils.to_camel_case(network.name)}}{{utils.to_camel_case(msg_name,"_")}}* in, char* buff, char separator)
+{
+  sprintf(buff, "",{{" "}}
+  {%-for i, key in enumerate(message["contents"].keys())-%}
+    {%-if not i == len(message["contents"].keys())-1 -%}
+      {{key}},{{" "}}
+    {%-else-%}
+      {{key}}
+    {%-endif-%}
+  {%-endfor-%}
+  );
+}
+void {{utils.to_camel_case(network.name)}}{{utils.to_camel_case(msg_name,"_")}}Header({{utils.to_camel_case(network.name)}}{{utils.to_camel_case(msg_name,"_")}}* in, char* buff, char separator)
+{
+  strcpy(buff, "
+  {%-for i, key in enumerate(message["contents"].keys())-%}
+    {%-if not i == len(message["contents"].keys())-1 -%}
+      {{key}},
+    {%-else-%}
+      {{key}}
+    {%-endif-%}
+  {%-endfor-%}
+  ");
+}
+
+{% endfor %}
